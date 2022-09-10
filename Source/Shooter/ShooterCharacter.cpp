@@ -52,8 +52,11 @@ AShooterCharacter::AShooterCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
+	FPSCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FPSCamera"));
+	FPSCamera->SetupAttachment(RootComponent);
+
 	ProjectileSpawnPoint = CreateDefaultSubobject<USceneComponent>( TEXT("Projectile Spawn Point") );
-	ProjectileSpawnPoint->SetupAttachment(RootComponent);//attaching spawn point to root
+	//ProjectileSpawnPoint->SetupAttachment(CapsuleComponent);//attaching spawn point to root
 
 
 
@@ -97,7 +100,7 @@ void AShooterCharacter::Shot()
 	//Shooting projectile
 	
 	FVector Location = ProjectileSpawnPoint->GetComponentLocation();
-	FRotator Rotation = ProjectileSpawnPoint->GetComponentRotation();
+	FRotator Rotation = FPSCamera->GetComponentRotation();
 
 	
 	GetWorld()->SpawnActor<AProjectile>(ProjectileClass, Location, Rotation);
