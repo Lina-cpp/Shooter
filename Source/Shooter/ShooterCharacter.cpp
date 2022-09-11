@@ -106,22 +106,6 @@ void AShooterCharacter::Shot() //in bp it's called "Shoot Projectile"
 
 }
 
-void AShooterCharacter::TestFunction()
-{
-	/*
-	FVector chuj(100,-100,0);
-	UE_LOG(LogTemp, Warning, TEXT("Działa chuj"));
-	FVector Location = FPSCamera->GetComponentLocation() + chuj;
-	FRotator Rotation = FPSCamera->GetComponentRotation();
-	*/
-
-	FVector Location = ProjectileSpawn->GetComponentLocation();
-	FRotator Rotation = FPSCamera->GetComponentRotation();
-	
-	GetWorld()->SpawnActor<AProjectile>(ProjectileClass, Location, Rotation);
-}
-
-
 void AShooterCharacter::DrawLineTrace()
 {
 	//drawing first trace

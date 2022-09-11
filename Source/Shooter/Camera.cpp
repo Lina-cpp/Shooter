@@ -3,6 +3,7 @@
 
 #include "Camera.h"
 #include "Components/CapsuleComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Projectile.h"
 
 // Sets default values
@@ -56,9 +57,13 @@ void ACamera::CameraShot()
 	FVector Location = CameraProjectileSpawnPoint->GetComponentLocation();
 	FRotator Rotation = CameraProjectileSpawnPoint->GetComponentRotation();
 
-	
+	//test
+	//AActor* Projectile = 
 	GetWorld()->SpawnActor<AProjectile>(ProjectileClas, Location, Rotation);
-	
 }
 
+void ACamera::DestroyingActor_Implementation()
+{
+	
+}
 

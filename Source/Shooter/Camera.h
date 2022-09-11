@@ -29,6 +29,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void CameraShot(); //shooting function
 
+	UFUNCTION(BlueprintNativeEvent)
+	void DestroyingActor();
+
 
 private:
 

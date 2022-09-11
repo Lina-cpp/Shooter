@@ -39,9 +39,6 @@ private:
 	UFUNCTION(BlueprintCallable)
 	void DrawLineTrace(); //drawing line trace - both functions called in bp_ThirdPersonCharacter
 
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "TestF"))
-	void TestFunction();
-
 public:
 	UPROPERTY(EditAnywhere)
 	USceneComponent* ProjectileSpawn; //spawn point of the projectile
