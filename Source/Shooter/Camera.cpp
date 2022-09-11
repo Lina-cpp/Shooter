@@ -48,7 +48,7 @@ void ACamera::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 }
 
 	
-void ACamera::Shot()
+void ACamera::CameraShot()
 {
 	
 	//Shooting projectile
