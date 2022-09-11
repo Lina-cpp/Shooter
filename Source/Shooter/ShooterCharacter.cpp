@@ -56,7 +56,11 @@ AShooterCharacter::AShooterCharacter()
 	FPSCamera->SetupAttachment(RootComponent);
 
 	ProjectileSpawnPoint = CreateDefaultSubobject<USceneComponent>( TEXT("Projectile Spawn Point") );
-	//ProjectileSpawnPoint->SetupAttachment(CapsuleComponent);//attaching spawn point to root
+	ProjectileSpawnPoint->SetupAttachment(FPSCamera);//attaching
+
+	//second to check if it will worjk
+	ProjectileSpawn = CreateDefaultSubobject<USceneComponent>( TEXT("Spawn point") );
+	ProjectileSpawn->SetupAttachment(RootComponent);
 
 
 
@@ -95,7 +99,7 @@ void AShooterCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerI
 }
 
 //shooting function
-void AShooterCharacter::Shot()
+void AShooterCharacter::Shot() //in bp it's called "Shoot Projectile"
 {
 	//Shooting projectile
 	
@@ -106,6 +110,21 @@ void AShooterCharacter::Shot()
 	GetWorld()->SpawnActor<AProjectile>(ProjectileClass, Location, Rotation);
 
 
+}
+
+void AShooterCharacter::TestFunction()
+{
+	/*
+	FVector chuj(100,-100,0);
+	UE_LOG(LogTemp, Warning, TEXT("Działa chuj"));
+	FVector Location = FPSCamera->GetComponentLocation() + chuj;
+	FRotator Rotation = FPSCamera->GetComponentRotation();
+	*/
+
+	FVector Location = ProjectileSpawn->GetComponentLocation();
+	FRotator Rotation = FPSCamera->GetComponentRotation();
+	
+	GetWorld()->SpawnActor<AProjectile>(ProjectileClass, Location, Rotation);
 }
 
 

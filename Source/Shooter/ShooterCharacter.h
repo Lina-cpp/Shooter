@@ -36,11 +36,18 @@ private:
 	UPROPERTY(EditAnywhere, Category="Combat")
 	TSubclassOf<class AProjectile> ProjectileClass; //class for projectile to choose what to shot
 
-	UFUNCTION(BlueprintCallable)
+
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Shoot projectile"))
 	void Shot(); //shooting function
 	UFUNCTION(BlueprintCallable)
-	void DrawLineTrace();
+	void DrawLineTrace(); //drawing line trace - both functions called in bp_ThirdPersonCharacter
 
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "TestF"))
+	void TestFunction();
+
+public:
+	UPROPERTY(EditAnywhere)
+	USceneComponent* ProjectileSpawn; //spawn point of the projectile
 
 protected:
 

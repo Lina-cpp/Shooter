@@ -21,8 +21,8 @@ ACamera::ACamera()
 	LensMesh = CreateDefaultSubobject<UStaticMeshComponent>( TEXT("Turret Mesh") );
 		LensMesh->SetupAttachment(BaseMesh); // Attaching to BaseMesh
 
-	ProjectileSpawnPoint = CreateDefaultSubobject<USceneComponent>( TEXT("Projectile Spawn Point") );
-		ProjectileSpawnPoint->SetupAttachment(LensMesh); // Attaching to LensMesh
+	CameraProjectileSpawnPoint = CreateDefaultSubobject<USceneComponent>( TEXT("Projectile Spawn Point") );
+		CameraProjectileSpawnPoint->SetupAttachment(LensMesh); // Attaching to LensMesh
 
 }
 
@@ -53,8 +53,8 @@ void ACamera::CameraShot()
 	
 	//Shooting projectile
 	
-	FVector Location = ProjectileSpawnPoint->GetComponentLocation();
-	FRotator Rotation = ProjectileSpawnPoint->GetComponentRotation();
+	FVector Location = CameraProjectileSpawnPoint->GetComponentLocation();
+	FRotator Rotation = CameraProjectileSpawnPoint->GetComponentRotation();
 
 	
 	GetWorld()->SpawnActor<AProjectile>(ProjectileClas, Location, Rotation);

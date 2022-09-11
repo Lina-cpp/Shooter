@@ -39,7 +39,7 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* LensMesh;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
-	USceneComponent* ProjectileSpawnPoint;
+	USceneComponent* CameraProjectileSpawnPoint;
 
 	//Allows to choose between BP_Projectile and Projectile(c++)
 	UPROPERTY(EditAnywhere, Category="Combat")
