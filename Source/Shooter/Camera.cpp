@@ -62,8 +62,3 @@ void ACamera::CameraShot()
 	GetWorld()->SpawnActor<AProjectile>(ProjectileClas, Location, Rotation);
 }
 
-void ACamera::DestroyingActor_Implementation()
-{
-	
-}
-

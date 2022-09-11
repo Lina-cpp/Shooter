@@ -27,9 +27,6 @@ AProjectile::AProjectile()
 void AProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-
-	//binding onhit() to OnHitComponent - ulog should work now!
-	ProjectileMesh->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);
 	
 }
 
@@ -40,36 +37,4 @@ void AProjectile::Tick(float DeltaTime)
 
 }
 
-
-
-void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
-{
-	//it's working!
-	UE_LOG(LogTemp, Warning, TEXT("onhit!"));
-	UE_LOG(LogTemp, Warning, TEXT("Hit comp: %s"), *HitComp->GetName());
-	UE_LOG(LogTemp, Warning, TEXT("Other actor: %s"), *OtherActor->GetName());
-	UE_LOG(LogTemp, Warning, TEXT("Other comp: %s"), *OtherComp->GetName());
-
-	/*
-	//setting instigator
-	auto MyOwner = GetOwner();
-	if(MyOwner == nullptr)
-	{
-		Destroy();
-		return;
-	}
-	
-	auto MyOwnerInstigator = MyOwner->GetInstigatorController();
-	auto DamageTypeClass = UDamageType::StaticClass();
-
-	//setting projectiles to deal damage and destroying them
-	if(OtherActor && OtherActor !=this && OtherActor != MyOwner)
-	{
-		UGameplayStatics::ApplyDamage(OtherActor, Damage, MyOwnerInstigator, this, DamageTypeClass);
-	}
-	*/
-	//Destroy();
-
-
-}
 
