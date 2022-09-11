@@ -55,10 +55,8 @@ AShooterCharacter::AShooterCharacter()
 	FPSCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FPSCamera"));
 	FPSCamera->SetupAttachment(RootComponent);
 
-	ProjectileSpawnPoint = CreateDefaultSubobject<USceneComponent>( TEXT("Projectile Spawn Point") );
-	ProjectileSpawnPoint->SetupAttachment(FPSCamera);//attaching
 
-	//second to check if it will worjk
+	//Projectile Spawn Point
 	ProjectileSpawn = CreateDefaultSubobject<USceneComponent>( TEXT("Spawn point") );
 	ProjectileSpawn->SetupAttachment(RootComponent);
 
@@ -93,9 +91,6 @@ void AShooterCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerI
 	PlayerInputComponent->BindTouch(IE_Pressed, this, &AShooterCharacter::TouchStarted);
 	PlayerInputComponent->BindTouch(IE_Released, this, &AShooterCharacter::TouchStopped);
 
-
-    //Binding Shot() to Pressed Mouse button
-    //PlayerInputComponent->BindAction( TEXT("Shot"), IE_Pressed, this, &AShooterCharacter::Shot );
 }
 
 //shooting function
@@ -103,9 +98,8 @@ void AShooterCharacter::Shot() //in bp it's called "Shoot Projectile"
 {
 	//Shooting projectile
 	
-	FVector Location = ProjectileSpawnPoint->GetComponentLocation();
+	FVector Location = ProjectileSpawn->GetComponentLocation();
 	FRotator Rotation = FPSCamera->GetComponentRotation();
-
 	
 	GetWorld()->SpawnActor<AProjectile>(ProjectileClass, Location, Rotation);
 
@@ -132,8 +126,8 @@ void AShooterCharacter::DrawLineTrace()
 {
 	//drawing first trace
 	FHitResult HitResult;
-	FVector StartLocation = ProjectileSpawnPoint->GetComponentLocation(); //First trace
-	FVector EndLocation = (ProjectileSpawnPoint->GetForwardVector() * 4000.f) + StartLocation;
+	FVector StartLocation = ProjectileSpawn->GetComponentLocation(); //First trace
+	FVector EndLocation = (ProjectileSpawn->GetForwardVector() * 4000.f) + StartLocation;
 
 	//calculating vector
 	const FVector DirectionUnitVector = UKismetMathLibrary::GetDirectionUnitVector(StartLocation, EndLocation);

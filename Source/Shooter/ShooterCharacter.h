@@ -30,9 +30,6 @@ public:
 
 //my c++ stuff
 private:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
-	USceneComponent* ProjectileSpawnPoint; //spawn point of the projectile
-
 	UPROPERTY(EditAnywhere, Category="Combat")
 	TSubclassOf<class AProjectile> ProjectileClass; //class for projectile to choose what to shot
 
