@@ -36,8 +36,12 @@ private:
 
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Shoot projectile"))
 	void Shot(); //shooting function
+
 	UFUNCTION(BlueprintCallable)
 	void DrawLineTrace(); //drawing line trace - both functions called in bp_ThirdPersonCharacter
+
+	UFUNCTION(BlueprintCallable)
+	void ProjectileFollowLine(); //Projectile following lane trace when mouse released
 
 public:
 	UPROPERTY(EditAnywhere)

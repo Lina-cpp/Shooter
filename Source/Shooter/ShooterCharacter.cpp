@@ -131,26 +131,7 @@ void AShooterCharacter::DrawLineTrace()
 	CollisionParams.AddIgnoredActor(this);
 
 	GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility, CollisionParams);
-	DrawDebugLine(GetWorld(), StartLocation, HitResult.Location, FColor::Red, false, 5, 0, 1 ); //drawing first debug line
-
-	//print
-	if(GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility, CollisionParams))
-	{
-		if(HitResult.bBlockingHit)
-		{
-			/*
-			GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("You are hitting: %s"), *HitResult.GetActor()->GetName()));
-			GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("Impact Point: %s"), *HitResult.ImpactPoint.ToString()));
-			GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("Normal Point: %s"), *HitResult.ImpactNormal.ToString()));
-			*/
-			GetWorld()->SpawnActor<AProjectile>(ProjectileClass, StartLocation, Rotation);
-		}
-	}
-
-
-	
-
-
+	DrawDebugLine(GetWorld(), StartLocation, HitResult.Location, FColor::Red, false, 0, 0, 1 ); //drawing first debug line
 
 //drawing second trace
 	FHitResult SecondHitResult;
@@ -161,16 +142,7 @@ void AShooterCharacter::DrawLineTrace()
 	SecondCollisionParams.AddIgnoredActor(HitResult.GetActor());
 
 	GetWorld()->LineTraceSingleByChannel( SecondHitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility, SecondCollisionParams);
-	DrawDebugLine(GetWorld(), StartLocation, SecondHitResult.Location, FColor::Blue, false, 1, 0, 1);
-
-	//print
-	if(GetWorld()->LineTraceSingleByChannel(SecondHitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility, CollisionParams))
-	{
-		if(HitResult.bBlockingHit)
-		{
-			GetWorld()->SpawnActor<AProjectile>(ProjectileClass, StartLocation, Rotation);
-		}
-	}
+	DrawDebugLine(GetWorld(), StartLocation, SecondHitResult.Location, FColor::Blue, false, 0, 0, 1);
 
 //drawing third trace
 	FHitResult ThirdHitResult;
@@ -181,8 +153,72 @@ void AShooterCharacter::DrawLineTrace()
 	ThirdCollisionParams.AddIgnoredActor(SecondHitResult.GetActor());
 
 	GetWorld()->LineTraceSingleByChannel(ThirdHitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility, ThirdCollisionParams);
-	DrawDebugLine(GetWorld(), StartLocation, ThirdHitResult.Location, FColor::Green, false, 1, 0, 1);
+	DrawDebugLine(GetWorld(), StartLocation, ThirdHitResult.Location, FColor::Green, false, 0, 0, 1);
 
+}
+
+
+void AShooterCharacter::ProjectileFollowLine()
+{
+	//rotation for spawning actor
+	FRotator Rotation = ProjectileSpawn->GetComponentRotation();
+
+
+//calculating traces
+
+	//drawing first trace
+	FHitResult HitResult;
+	FVector StartLocation = ProjectileSpawn->GetComponentLocation(); //First trace
+	FVector EndLocation = (ProjectileSpawn->GetForwardVector() * 4000.f) + StartLocation;
+
+	//calculating vector
+	const FVector DirectionUnitVector = UKismetMathLibrary::GetDirectionUnitVector(StartLocation, EndLocation);
+	//ignoring player (to avoid bug with colliding with player)
+	FCollisionQueryParams CollisionParams;
+	CollisionParams.AddIgnoredActor(this);
+
+	//calculations
+	GetWorld()->LineTraceSingleByChannel( HitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility, CollisionParams);
+
+	//spawn bullet
+	if(GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility, CollisionParams))
+	{
+		if(HitResult.bBlockingHit)
+		{
+			GetWorld()->SpawnActor<AProjectile>(ProjectileClass, StartLocation, Rotation);
+		}
+	}
+
+
+
+//Second bullet
+
+	FHitResult SecondHitResult;
+	StartLocation = HitResult.Location;
+	EndLocation = (4000.f * FMath::GetReflectionVector(DirectionUnitVector, HitResult.Normal)) + StartLocation;
+
+	FCollisionQueryParams SecondCollisionParams;
+	SecondCollisionParams.AddIgnoredActor(HitResult.GetActor());
+
+	GetWorld()->LineTraceSingleByChannel( SecondHitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility, SecondCollisionParams);
+	//print
+	if(GetWorld()->LineTraceSingleByChannel(SecondHitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility, CollisionParams))
+	{
+		if(HitResult.bBlockingHit)
+		{
+			GetWorld()->SpawnActor<AProjectile>(ProjectileClass, StartLocation, Rotation);
+		}
+	}
+
+//third bullet
+	FHitResult ThirdHitResult;
+	StartLocation = SecondHitResult.Location;
+	EndLocation = (4000.f * FMath::GetReflectionVector(DirectionUnitVector, SecondHitResult.Normal)) + StartLocation;
+	
+	FCollisionQueryParams ThirdCollisionParams;
+	ThirdCollisionParams.AddIgnoredActor(SecondHitResult.GetActor());
+
+	GetWorld()->LineTraceSingleByChannel(ThirdHitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility, ThirdCollisionParams);
 	//print
 	if(GetWorld()->LineTraceSingleByChannel(ThirdHitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility, CollisionParams))
 	{
@@ -192,7 +228,9 @@ void AShooterCharacter::DrawLineTrace()
 		}
 	}
 
+
 }
+
 
 
 
