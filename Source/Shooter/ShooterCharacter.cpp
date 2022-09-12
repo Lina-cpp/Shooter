@@ -93,6 +93,14 @@ void AShooterCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerI
 
 }
 
+
+void AShooterCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+}
+
+
 //shooting function
 void AShooterCharacter::Shot() //in bp it's called "Shoot Projectile"
 {
@@ -120,7 +128,19 @@ void AShooterCharacter::DrawLineTrace()
 	CollisionParams.AddIgnoredActor(this);
 
 	GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility, CollisionParams);
-	DrawDebugLine(GetWorld(), StartLocation, HitResult.Location, FColor::Red, false, 5.f ); //drawing first debug line
+	DrawDebugLine(GetWorld(), StartLocation, HitResult.Location, FColor::Red, false, 5, 0, 1 ); //drawing first debug line
+
+	//print
+	if(GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility, CollisionParams))
+	{
+		if(HitResult.bBlockingHit)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("You are hitting: %s"), *HitResult.GetActor()->GetName()));
+			GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("Impact Point: %s"), *HitResult.ImpactPoint.ToString()));
+			GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("Normal Point: %s"), *HitResult.ImpactNormal.ToString()));
+		}
+	}
+
 
 //drawing second trace
 	FHitResult SecondHitResult;
@@ -131,7 +151,7 @@ void AShooterCharacter::DrawLineTrace()
 	SecondCollisionParams.AddIgnoredActor(HitResult.GetActor());
 
 	GetWorld()->LineTraceSingleByChannel( SecondHitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility, SecondCollisionParams);
-	DrawDebugLine(GetWorld(), StartLocation, SecondHitResult.Location, FColor::Blue, false, 5.f );
+	DrawDebugLine(GetWorld(), StartLocation, SecondHitResult.Location, FColor::Blue, false, 1, 0, 1);
 //drawing third trace
 	FHitResult ThirdHitResult;
 	StartLocation = SecondHitResult.Location;
@@ -141,7 +161,7 @@ void AShooterCharacter::DrawLineTrace()
 	ThirdCollisionParams.AddIgnoredActor(SecondHitResult.GetActor());
 
 	GetWorld()->LineTraceSingleByChannel(ThirdHitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility, ThirdCollisionParams);
-	DrawDebugLine(GetWorld(), StartLocation, ThirdHitResult.Location, FColor::Green, false, 5.f );
+	DrawDebugLine(GetWorld(), StartLocation, ThirdHitResult.Location, FColor::Green, false, 1, 0, 1);
 }
 
 

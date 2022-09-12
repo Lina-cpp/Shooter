@@ -43,6 +43,8 @@ public:
 	UPROPERTY(EditAnywhere)
 	USceneComponent* ProjectileSpawn; //spawn point of the projectile
 
+	virtual void Tick(float DeltaTime) override;
+
 protected:
 
 	/** Called for forwards/backward input */
