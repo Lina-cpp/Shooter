@@ -116,6 +116,9 @@ void AShooterCharacter::Shot() //in bp it's called "Shoot Projectile"
 
 void AShooterCharacter::DrawLineTrace()
 {
+	//rotation for spawning actor
+	FRotator Rotation = ProjectileSpawn->GetComponentRotation();
+
 	//drawing first trace
 	FHitResult HitResult;
 	FVector StartLocation = ProjectileSpawn->GetComponentLocation(); //First trace
@@ -135,11 +138,18 @@ void AShooterCharacter::DrawLineTrace()
 	{
 		if(HitResult.bBlockingHit)
 		{
+			/*
 			GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("You are hitting: %s"), *HitResult.GetActor()->GetName()));
 			GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("Impact Point: %s"), *HitResult.ImpactPoint.ToString()));
 			GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, FString::Printf(TEXT("Normal Point: %s"), *HitResult.ImpactNormal.ToString()));
+			*/
+			GetWorld()->SpawnActor<AProjectile>(ProjectileClass, StartLocation, Rotation);
 		}
 	}
+
+
+	
+
 
 
 //drawing second trace
@@ -152,6 +162,16 @@ void AShooterCharacter::DrawLineTrace()
 
 	GetWorld()->LineTraceSingleByChannel( SecondHitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility, SecondCollisionParams);
 	DrawDebugLine(GetWorld(), StartLocation, SecondHitResult.Location, FColor::Blue, false, 1, 0, 1);
+
+	//print
+	if(GetWorld()->LineTraceSingleByChannel(SecondHitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility, CollisionParams))
+	{
+		if(HitResult.bBlockingHit)
+		{
+			GetWorld()->SpawnActor<AProjectile>(ProjectileClass, StartLocation, Rotation);
+		}
+	}
+
 //drawing third trace
 	FHitResult ThirdHitResult;
 	StartLocation = SecondHitResult.Location;
@@ -162,6 +182,16 @@ void AShooterCharacter::DrawLineTrace()
 
 	GetWorld()->LineTraceSingleByChannel(ThirdHitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility, ThirdCollisionParams);
 	DrawDebugLine(GetWorld(), StartLocation, ThirdHitResult.Location, FColor::Green, false, 1, 0, 1);
+
+	//print
+	if(GetWorld()->LineTraceSingleByChannel(ThirdHitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility, CollisionParams))
+	{
+		if(HitResult.bBlockingHit)
+		{
+			GetWorld()->SpawnActor<AProjectile>(ProjectileClass, StartLocation, Rotation);
+		}
+	}
+
 }
 
 
